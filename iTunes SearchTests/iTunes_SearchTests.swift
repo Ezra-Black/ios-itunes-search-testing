@@ -22,12 +22,10 @@ class iTunes_SearchTests: XCTestCase {
         XCTAssertGreaterThan(controller.searchResults.count, 0)
     }
     
-    
-    
     func testSpeedOfTypicalRequest() {
         measure {
             let expectation = self.expectation(description: "Wait for results")
-            let controller = SearchResultController()
+            let controller = SearchResultController(dataLoader: URLSession(configuration: .ephemeral))
             controller.performSearch(for: "GarageBand", resultType: .software) {
                 expectation.fulfill()
             }
@@ -38,7 +36,7 @@ class iTunes_SearchTests: XCTestCase {
     func testSpeedOfTypicalRequestMoreAccurately() {
         measureMetrics([.wallClockTime], automaticallyStartMeasuring: false) {
             let expectation = self.expectation(description: "Wait for results")
-            let controller = SearchResultController()
+            let controller = SearchResultController(dataLoader: URLSession(configuration: .ephemeral))
             startMeasuring()
             controller.performSearch(for: "GarageBand", resultType: .software) {
                 self.stopMeasuring()
